@@ -2,6 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="android.view.View"/>
+        <import type="android.view.Gravity"/>
         <variable name="message" type="com.pangea.examples.simplechat.viewModel.MessageViewModel"/>
     </data>
 
@@ -13,7 +15,8 @@
             android:contentDescription="@string/profile_other"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/ic_launcher"
+            android:visibility="@{message.isMine ? View.GONE : View.VISIBLE}"/>
         <TextView
             android:textSize="18sp"
             android:id="@+id/tvBody"
@@ -21,7 +24,9 @@
             android:lines="3"
             android:layout_marginRight="64dp"
             android:layout_width="match_parent"
-            android:layout_height="64dp">
+            android:layout_height="64dp"
+            android:gravity="@{message.isMine ? Gravity.CENTER_VERTICAL | Gravity.END : Gravity.CENTER_VERTICAL | Gravity.START}"
+            android:text="@{message.messageText}">
         </TextView>
         <ImageView
             android:id="@+id/ivProfileRight"
@@ -29,7 +34,8 @@
             android:layout_marginLeft="-64dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:visibility="@{message.isMine ? View.VISIBLE : View.GONE}"/>
 
     </LinearLayout>
 </layout>

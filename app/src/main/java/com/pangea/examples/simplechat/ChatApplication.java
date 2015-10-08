@@ -2,6 +2,7 @@ package com.pangea.examples.simplechat;
 
 import android.app.Application;
 
+import com.pangea.examples.simplechat.model.Message;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

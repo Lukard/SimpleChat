@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.pangea.examples.simplechat.model.Message;
+import com.pangea.examples.simplechat.parse.MessageUtils;
 import com.pangea.examples.simplechat.views.MessagesAdapter;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -29,7 +30,6 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = ChatActivity.class.getName();
-    private static final int MAX_CHAT_MESSAGES_TO_SHOW = 50;
 
     private static String sUserId;
 
@@ -45,8 +45,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
-    // Keep track of initial load to scroll to the bottom of the ListView
-    private boolean mFirstLoad;
 
     @AfterViews
     void init() {
@@ -98,11 +96,9 @@ public class ChatActivity extends AppCompatActivity {
     private void setupMessagePosting() {
         rvChat.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setReverseLayout(true);
+//        mLayoutManager.setReverseLayout(true);
         rvChat.setLayoutManager(mLayoutManager);
         mMessages = new ArrayList<>();
-        // Automatically scroll to the bottom when a data set change notification is received and only if the last item is already visible on screen. Don't scroll to the bottom otherwise.
-        mFirstLoad = true;
         mAdapter = new MessagesAdapter(mMessages);
         rvChat.setAdapter(mAdapter);
         // When send button is clicked, create message object on Parse
@@ -128,28 +124,21 @@ public class ChatActivity extends AppCompatActivity {
 
     // Query messages from Parse so we can load them into the chat adapter
     private void receiveMessage() {
-        // Construct query to execute
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        // Configure limit and sort order
-        query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
-        query.orderByAscending("createdAt");
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
-        query.findInBackground(new FindCallback<Message>() {
-            public void done(List<Message> messages, ParseException e) {
-                if (e == null) {
-                    mMessages.clear();
+        MessageUtils.receiveMessage(messageCallback);
+    }
+
+    FindCallback<Message> messageCallback = new FindCallback<Message>() {
+        public void done(List<Message> messages, ParseException e) {
+            if (e == null) {
+                messages.removeAll(mMessages);
+                if (messages.size() > 0) {
                     mMessages.addAll(messages);
                     mAdapter.notifyDataSetChanged(); // update adapter
-                    // Scroll to the bottom of the list on initial load
-                    if (mFirstLoad) {
-                        rvChat.scrollToPosition(mAdapter.getItemCount() - 1);
-                        mFirstLoad = false;
-                    }
-                } else {
-                    Log.d("message", "Error: " + e.getMessage());
+                    rvChat.scrollToPosition(mAdapter.getItemCount() - 1);
                 }
+            } else {
+                Log.d("message", "Error: " + e.getMessage());
             }
-        });
-    }
+        }
+    };
 }
