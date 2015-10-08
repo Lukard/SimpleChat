@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <import type="android.view.View"/>
@@ -7,35 +8,57 @@
         <variable name="message" type="com.pangea.examples.simplechat.viewModel.MessageViewModel"/>
     </data>
 
-    <LinearLayout android:id="@+id/layout" android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp">
 
-        <ImageView
-            android:id="@+id/ivProfileLeft"
-            android:contentDescription="@string/profile_other"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="@{message.isMine ? View.GONE : View.VISIBLE}"/>
-        <TextView
-            android:textSize="18sp"
-            android:id="@+id/tvBody"
-            android:padding="20dp"
-            android:lines="3"
-            android:layout_marginRight="64dp"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:gravity="@{message.isMine ? Gravity.CENTER_VERTICAL | Gravity.END : Gravity.CENTER_VERTICAL | Gravity.START}"
-            android:text="@{message.messageText}">
-        </TextView>
-        <ImageView
-            android:id="@+id/ivProfileRight"
-            android:contentDescription="@string/profile_me"
-            android:layout_marginLeft="-64dp"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@mipmap/ic_launcher"
-            android:visibility="@{message.isMine ? View.VISIBLE : View.GONE}"/>
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            android:layout_gravity="@{message.isMine ?  Gravity.END :  Gravity.START}"
+            card_view:cardCornerRadius="4dp" >
 
-    </LinearLayout>
+            <LinearLayout android:id="@+id/layout" android:orientation="horizontal" android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivProfileLeft"
+                    android:contentDescription="@string/profile_other"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@mipmap/ic_launcher"
+                    app:imageUrl="@{message.userId}"
+                    android:visibility="@{message.isMine ? View.GONE : View.VISIBLE}"/>
+                <TextView
+                    android:textSize="18sp"
+                    android:id="@+id/tvBody"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="@{message.isMine ? Gravity.CENTER_VERTICAL | Gravity.END : Gravity.CENTER_VERTICAL | Gravity.START}"
+                    android:text="@{message.messageText}">
+                </TextView>
+                <ImageView
+                    android:id="@+id/ivProfileRight"
+                    android:contentDescription="@string/profile_me"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@mipmap/ic_launcher"
+                    app:imageUrl="@{message.userId}"
+                    android:visibility="@{message.isMine ? View.VISIBLE : View.GONE}"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
 </layout>

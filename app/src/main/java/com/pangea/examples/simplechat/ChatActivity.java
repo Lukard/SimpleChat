@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.pangea.examples.simplechat.model.Message;
 import com.pangea.examples.simplechat.parse.MessageUtils;
+import com.pangea.examples.simplechat.parse.UserUtils;
 import com.pangea.examples.simplechat.views.MessagesAdapter;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
@@ -31,8 +32,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = ChatActivity.class.getName();
 
-    private static String sUserId;
-
     // Create a handler which can run code periodically
     private Handler handler = new Handler();
 
@@ -50,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     void init() {
         // User login
         if (ParseUser.getCurrentUser() != null) { // start with existing user
-            startWithCurrentUser();
+            setupMessagePosting();
         } else { // If not logged in, login as a new anonymous user
             login();
         }
@@ -72,12 +71,6 @@ public class ChatActivity extends AppCompatActivity {
         receiveMessage();
     }
 
-    // Get the userId from the cached currentUser object
-    private void startWithCurrentUser() {
-        sUserId = ParseUser.getCurrentUser().getObjectId();
-        setupMessagePosting();
-    }
-
     // Create an anonymous user using ParseAnonymousUtils and set sUserId
     private void login() {
         ParseAnonymousUtils.logIn(new LogInCallback() {
@@ -86,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (e != null) {
                     Log.d(TAG, "Anonymous login failed: " + e.toString());
                 } else {
-                    startWithCurrentUser();
+                    setupMessagePosting();
                 }
             }
         });
@@ -96,7 +89,7 @@ public class ChatActivity extends AppCompatActivity {
     private void setupMessagePosting() {
         rvChat.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-//        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setReverseLayout(true);
         rvChat.setLayoutManager(mLayoutManager);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
@@ -109,7 +102,7 @@ public class ChatActivity extends AppCompatActivity {
                 String body = etMessage.getText().toString();
                 // Use Message model to create new messages now
                 Message message = new Message();
-                message.setUserId(sUserId);
+                message.setUserId(UserUtils.getMyUserId());
                 message.setBody(body);
                 message.saveInBackground(new SaveCallback() {
                     @Override
@@ -132,9 +125,8 @@ public class ChatActivity extends AppCompatActivity {
             if (e == null) {
                 messages.removeAll(mMessages);
                 if (messages.size() > 0) {
-                    mMessages.addAll(messages);
+                    mMessages.addAll(0, messages);
                     mAdapter.notifyDataSetChanged(); // update adapter
-                    rvChat.scrollToPosition(mAdapter.getItemCount() - 1);
                 }
             } else {
                 Log.d("message", "Error: " + e.getMessage());

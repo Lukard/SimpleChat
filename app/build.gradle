@@ -42,6 +42,10 @@ dependencies {
 
     // Recycler View
     compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'jp.wasabeef:recyclerview-animators:1.3.0' // for animations
+
+    // CardView
+    compile 'com.android.support:cardview-v7:22.2.1'
 }
 
 apt {

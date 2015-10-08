@@ -14,7 +14,7 @@ public class MessageUtils {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         // Configure limit and sort order
         query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
-        query.orderByAscending("createdAt");
+        query.orderByDescending("createdAt");
         // Execute query to fetch all messages from Parse asynchronously
         // This is equivalent to a SELECT query with SQL
         query.findInBackground(callback);
