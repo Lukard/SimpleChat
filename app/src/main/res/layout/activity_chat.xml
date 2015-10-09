@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".ChatActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvChat"
-        android:transcriptMode="alwaysScroll"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/llSend"
-        android:scrollbars="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+    <data>
+        <variable name="chat" type="com.pangea.examples.simplechat.viewModel.ChatViewModel"/>
+    </data>
 
-    <RelativeLayout
-        android:id="@+id/llSend"
-        android:layout_alignParentBottom="true"
+    <RelativeLayout android:id="@+id/rlChat"
         android:layout_width="match_parent"
-        android:padding="16dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/abc_menu_hardkey_panel_mtrl_mult">
-        <EditText
-            android:id="@+id/etMessage"
-            android:layout_toLeftOf="@+id/btSend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btSend"
-            android:gravity="top"
-            android:hint="@string/message_hint"
-            android:imeOptions="actionSend"/>
-        <Button
-            android:id="@+id/btSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:layout_height="match_parent" tools:context=".ChatActivity">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvChat"
+            android:transcriptMode="alwaysScroll"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
-            android:text="@string/send"
-            android:textSize="18sp" >
-        </Button>
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/llSend"
+            android:scrollbars="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/llSend"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/abc_menu_hardkey_panel_mtrl_mult">
+            <EditText
+                android:id="@+id/etMessage"
+                android:layout_toLeftOf="@+id/btSend"
+                android:layout_toStartOf="@+id/btSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btSend"
+                android:gravity="top"
+                android:hint="@string/message_hint"
+                android:text="@{chat.newMessageText}"
+                android:imeOptions="actionSend"/>
+            <Button
+                android:id="@+id/btSend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/send"
+                android:textSize="18sp"
+                android:onClick="@{chat.onClickSend}">
+            </Button>
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+</layout>
