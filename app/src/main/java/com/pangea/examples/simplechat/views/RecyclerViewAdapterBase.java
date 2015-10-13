@@ -11,6 +11,10 @@ public abstract class RecyclerViewAdapterBase<T, V extends ViewDataBinding> exte
 
     protected List<T> items = new ArrayList<>();
 
+    public T getItem(int pos) {
+        return items.get(pos);
+    }
+
     @Override
     public int getItemCount() {
         return items.size();

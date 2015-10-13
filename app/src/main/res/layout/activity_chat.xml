@@ -8,7 +8,7 @@
 
     <RelativeLayout android:id="@+id/rlChat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" tools:context=".ChatActivity">
+        android:layout_height="match_parent" tools:context=".views.activities.ChatActivity">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvChat"
@@ -40,6 +40,7 @@
                 android:gravity="top"
                 android:hint="@string/message_hint"
                 android:text="@{chat.newMessageText}"
+                android:addTextChangedListener="@{chat}"
                 android:imeOptions="actionSend"/>
             <Button
                 android:id="@+id/btSend"

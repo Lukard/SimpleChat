@@ -6,24 +6,39 @@ import com.parse.ParseObject;
 @ParseClassName("Message")
 public class Message extends ParseObject {
 
-    public String userId;
+    public static final String USER_ID_ARG = "userId";
+    public static final String RECEIVER_ID_ARG = "receiverId";
+    public static final String BODY_ARG = "body";
+
+    private String userId;
+    private String receiverId;
     private String body;
 
     public String getUserId() {
-        return getString("userId");
+        return getString(USER_ID_ARG);
+    }
+
+    public String getReceiverId() {
+        return getString(RECEIVER_ID_ARG);
     }
 
     public String getBody() {
-        return getString("body");
+        return getString(BODY_ARG);
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
-        put("userId", userId);
+        put(USER_ID_ARG, userId);
+    }
+
+    public void setReceiverId(String receiverid) {
+        this.receiverId = receiverid;
+        put(RECEIVER_ID_ARG, receiverId);
     }
 
     public void setBody(String body) {
         this.body = body;
-        put("body", body);
+        put(BODY_ARG, body);
     }
+
 }
