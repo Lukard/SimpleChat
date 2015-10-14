@@ -1,7 +1,12 @@
 package com.pangea.examples.simplechat.views.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -26,6 +31,7 @@ public class ChatActivity extends AppCompatActivity implements FindCallback<Mess
 
     private static final String TAG = ChatActivity.class.getName();
     public static final String RECEIVER_ID_ARG = "receiverId";
+    public static final String MESSAGE_LOCAL_RECEIVER_ARG = "MessageLocalReceiver";
 
     private String receiverId;
 
@@ -51,6 +57,15 @@ public class ChatActivity extends AppCompatActivity implements FindCallback<Mess
             login();
         }
 
+        LocalBroadcastManager
+                .getInstance(this)
+                .registerReceiver(messageReceiver, new IntentFilter(MESSAGE_LOCAL_RECEIVER_ARG));
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
+        super.onDestroy();
     }
 
     // Create an anonymous user using ParseAnonymousUtils and set sUserId
@@ -102,4 +117,12 @@ public class ChatActivity extends AppCompatActivity implements FindCallback<Mess
     public void done(ParseException e) {
         receiveMessage();
     }
+
+    private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.wtf("TAG", "Updating messages!");
+            receiveMessage();
+        }
+    };
 }
