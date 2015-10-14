@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.pangea.examples.simplechat.model.Message;
 import com.parse.Parse;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 
 public class ChatApplication extends Application {
@@ -22,7 +21,7 @@ public class ChatApplication extends Application {
         ParseObject.registerSubclass(Message.class);
         // Existing initialization happens after all classes are registered
         Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+//        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
 }

@@ -18,10 +18,7 @@ import com.pangea.examples.simplechat.parse.MessageUtils;
 import com.pangea.examples.simplechat.viewModel.ChatViewModel;
 import com.pangea.examples.simplechat.views.MessagesAdapter;
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
-import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -29,7 +26,6 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity implements FindCallback<Message>, SaveCallback {
 
-    private static final String TAG = ChatActivity.class.getName();
     public static final String RECEIVER_ID_ARG = "receiverId";
     public static final String MESSAGE_LOCAL_RECEIVER_ARG = "MessageLocalReceiver";
 
@@ -46,16 +42,7 @@ public class ChatActivity extends AppCompatActivity implements FindCallback<Mess
 
         receiverId = getIntent().getStringExtra(RECEIVER_ID_ARG);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_chat);
-        ChatViewModel viewModel = new ChatViewModel(receiverId, this);
-        binding.setChat(viewModel);
-
-        // User login
-        if (ParseUser.getCurrentUser() != null) { // start with existing user
-            setupMessagePosting();
-        } else { // If not logged in, login as a new anonymous user
-            login();
-        }
+        setupMessagePosting();
 
         LocalBroadcastManager
                 .getInstance(this)
@@ -68,22 +55,12 @@ public class ChatActivity extends AppCompatActivity implements FindCallback<Mess
         super.onDestroy();
     }
 
-    // Create an anonymous user using ParseAnonymousUtils and set sUserId
-    private void login() {
-        ParseAnonymousUtils.logIn(new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e != null) {
-                    Log.d(TAG, "Anonymous login failed: " + e.toString());
-                } else {
-                    setupMessagePosting();
-                }
-            }
-        });
-    }
-
     // Setup button event handler which posts the entered message to Parse
     private void setupMessagePosting() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_chat);
+        ChatViewModel viewModel = new ChatViewModel(receiverId, this);
+        binding.setChat(viewModel);
+
         binding.rvChat.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setReverseLayout(true);
@@ -121,7 +98,6 @@ public class ChatActivity extends AppCompatActivity implements FindCallback<Mess
     private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.wtf("TAG", "Updating messages!");
             receiveMessage();
         }
     };

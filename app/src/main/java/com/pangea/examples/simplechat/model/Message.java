@@ -1,7 +1,12 @@
 package com.pangea.examples.simplechat.model;
 
+import android.os.Bundle;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @ParseClassName("Message")
 public class Message extends ParseObject {
@@ -13,6 +18,15 @@ public class Message extends ParseObject {
     private String userId;
     private String receiverId;
     private String body;
+
+    public Message() {
+    }
+
+    private Message(String userId, String receiverId, String body) {
+        setUserId(userId);
+        setReceiverId(receiverId);
+        setBody(body);
+    }
 
     public String getUserId() {
         return getString(USER_ID_ARG);
@@ -41,4 +55,20 @@ public class Message extends ParseObject {
         put(BODY_ARG, body);
     }
 
+    public static Message fromBundle(Bundle args) {
+        try {
+            JSONObject data = new JSONObject(args.getString("com.parse.Data"));
+            String receiverId = data.getString(RECEIVER_ID_ARG);
+            String body = data.getString(BODY_ARG);
+            return new Message("", receiverId, body);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        for (String key : args.keySet()) {
+//            Object value = args.get(key);
+//            Log.d("TAG", String.format("%s %s (%s)", key,
+//                    value.toString(), value.getClass().getName()));
+//        }
+        return null;
+    }
 }
