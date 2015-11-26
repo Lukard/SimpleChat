@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Simple Chat": {
+      "applicationId": "1po4juGU0sU3i7JVm0u6P7y3EcbCS0pE3Mqj7Ad3"
+    },
+    "_default": {
+      "link": "Simple Chat"
+    }
+  }
+}
